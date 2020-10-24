@@ -31,6 +31,7 @@ var Recommendations = []interface{}{
 	},
 }
 
+// Format controls how a trip object appears publicly
 func (t trip) Format() interface{} {
 	return map[string]interface{}{
 		"name":         t.Name,
