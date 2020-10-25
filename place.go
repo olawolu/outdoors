@@ -3,7 +3,9 @@ package outdoors
 var (
 	// APIKey for Google's places API
 	APIKey  string
-	baseURL = "https://maps.googleapis.com/maps/api/place"
+	baseURL = "https://maps.googleapis.com/maps/api/place/"
+	nearbySearchURL = baseURL + "nearbysearch/json?"
+	photosURL = baseURL + "photo?"
 )
 
 // Geometry defines the coordinates of a place
