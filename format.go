@@ -5,8 +5,8 @@ type Formatter interface {
 	Format() interface{}
 }
 
-// Format takes in an object and checks if it implements Formatter
-func Format(o interface{}) interface{} {
+// Display takes in an object and checks if it implements Formatter
+func Display(o interface{}) interface{} {
 	if object, isFormatter := o.(Formatter); isFormatter {
 		return object.Format()
 	}
