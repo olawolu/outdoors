@@ -14,14 +14,17 @@ import (
 	"github.com/olawolu/outdoors"
 )
 
+var addr string
+
 func init() {
 	if err := godotenv.Load("../../.env"); err != nil {
 		log.Fatalf("Failed to load environment variables: %v", err)
 	}
+	outdoors.APIKey = os.Getenv("PLACES_KEY")
+	addr = ":" + os.Getenv("PORT")
 }
 
 func main() {
-	outdoors.APIKey = os.Getenv("PLACES_KEY")
 	http.HandleFunc("/journeys", cors(func(w http.ResponseWriter, r *http.Request) {
 		respond(w, r, outdoors.Recommendations)
 	}))
@@ -29,15 +32,9 @@ func main() {
 		q := &outdoors.Query{
 			Destinations: strings.Split(r.URL.Query().Get("journey"), "|"),
 		}
-		// fmt.Println(r.URL.Query())
-		// fmt.Println(r.URL.Query().Get("lat"))
-
-		// fmt.Println(strings.Split(r.URL.Query().Get("journey"), "|"))
-
 		var err error
 		q.Lat, err = strconv.ParseFloat(r.URL.Query().Get("lat"), 64)
 		if err != nil {
-			// fmt.Println(q)
 			handleError(err)
 		}
 		q.Lng, err = strconv.ParseFloat(r.URL.Query().Get("lng"), 64)
@@ -50,19 +47,10 @@ func main() {
 		}
 		q.PriceRange = r.URL.Query().Get("cost")
 		places := q.Run()
-		// fmt.Println(places)
-		// places, ok := <-placechan
-		// if ok {
-		// 	fmt.Println("Channel is open!")
-		// 	respond(w, r, places)
-		// } else {
-		// 	fmt.Println("Channel is closed!")
-		// }
 		respond(w, r, places)
-
 	}))
 	log.Println("listening")
-	err := http.ListenAndServe(":8080", http.DefaultServeMux)
+	err := http.ListenAndServe(addr,  http.DefaultServeMux)
 	if err != nil {
 		log.Fatal("An error occured")
 	}
