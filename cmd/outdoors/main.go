@@ -18,7 +18,7 @@ var addr string
 
 func init() {
 	if err := godotenv.Load("../../.env"); err != nil {
-		log.Println("Failed to load .env file: %v", err)
+		log.Printf("Failed to load .env file: %v", err)
 	}
 	outdoors.APIKey = os.Getenv("PLACES_KEY")
 	addr = ":" + os.Getenv("PORT")
