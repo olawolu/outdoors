@@ -59,7 +59,6 @@ func buildQuery(q *Query, types string) (url.Values, error) {
 	values.Set("type", types)
 	values.Set("key", APIKey)
 	if len(q.PriceRange) > 0 {
-		// TODO: parse the price range
 		r, err := ParsePriceRange(q.PriceRange)
 		if err != nil {
 			log.Println("Error parsing price range")
@@ -133,35 +132,35 @@ func (q *Query) Run() []interface{} {
 	return places
 }
 
-func searchPlace(q *Query, types string, i int, w *sync.WaitGroup, c chan []interface{}) {
-	// create a mutual exclusion lock to allow the goroutines access the shared varible (the map) concurrently
-	places := make([]interface{}, len(q.Destinations))
-	rand.Seed(time.Now().UnixNano())
-	var l sync.Mutex
-	defer w.Done()
-	// get the result from google's api endpoint query
-	res, err := q.find(types)
-	if err != nil {
-		log.Println("Failed to find places:", err)
-		return
-	}
-	// check for found places
-	if len(res.Results) == 0 {
-		log.Println("No result found for ", types)
-		return
-	}
-	// load the photos of found places
-	for _, result := range res.Results {
-		for _, photo := range result.Photos {
-			photo.URL = photosURL + "maxwidth=1000&photoreference=" + photo.PhotoRef + "&key=" + APIKey
-		}
-	}
-	// create a random integer to randomize picks
-	randI := rand.Intn(len(res.Results))
-	l.Lock()
-	// log.Println(res.Results)
-	places[i] = res.Results[randI]
-	c <- places
-	close(c)
-	l.Unlock()
-}
+// func searchPlace(q *Query, types string, i int, w *sync.WaitGroup, c chan []interface{}) {
+// 	// create a mutual exclusion lock to allow the goroutines access the shared varible (the map) concurrently
+// 	places := make([]interface{}, len(q.Destinations))
+// 	rand.Seed(time.Now().UnixNano())
+// 	var l sync.Mutex
+// 	defer w.Done()
+// 	// get the result from google's api endpoint query
+// 	res, err := q.find(types)
+// 	if err != nil {
+// 		log.Println("Failed to find places:", err)
+// 		return
+// 	}
+// 	// check for found places
+// 	if len(res.Results) == 0 {
+// 		log.Println("No result found for ", types)
+// 		return
+// 	}
+// 	// load the photos of found places
+// 	for _, result := range res.Results {
+// 		for _, photo := range result.Photos {
+// 			photo.URL = photosURL + "maxwidth=1000&photoreference=" + photo.PhotoRef + "&key=" + APIKey
+// 		}
+// 	}
+// 	// create a random integer to randomize picks
+// 	randI := rand.Intn(len(res.Results))
+// 	l.Lock()
+// 	// log.Println(res.Results)
+// 	places[i] = res.Results[randI]
+// 	c <- places
+// 	close(c)
+// 	l.Unlock()
+// }

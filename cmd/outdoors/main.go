@@ -18,7 +18,7 @@ var addr string
 
 func init() {
 	if err := godotenv.Load("../../.env"); err != nil {
-		log.Fatalf("Failed to load environment variables: %v", err)
+		log.Println("Failed to load .env file: %v", err)
 	}
 	outdoors.APIKey = os.Getenv("PLACES_KEY")
 	addr = ":" + os.Getenv("PORT")
@@ -49,7 +49,7 @@ func main() {
 		places := q.Run()
 		respond(w, r, places)
 	}))
-	log.Println("listening")
+	log.Println("listening on localhost"+addr)
 	err := http.ListenAndServe(addr,  http.DefaultServeMux)
 	if err != nil {
 		log.Fatal("An error occured")
