@@ -49,9 +49,9 @@ jobs:
       # Update a deployment Docker image.
       - gke/update-kubeconfig-with-credentials:
           cluster: cluster-1
-          gcloud-service-key: ${GCLOUD_SERVICE_KEY}
-          google-compute-zone: ${GOOGLE_COMPUTE_ZONE}
-          google-project-id: ${GOOGLE_PROJECT_ID}
+          gcloud-service-key: GCLOUD_SERVICE_KEY
+          google-compute-zone: GOOGLE_COMPUTE_ZONE
+          google-project-id: GOOGLE_PROJECT_ID
       - gke/rollout-image:
           cluster: cluster-1
           deployment: outdoorsapi
@@ -73,7 +73,7 @@ workflows:
             branches:
               only:
                 - master
-                
+
       - deploy:
           requires:
             - dockerize
