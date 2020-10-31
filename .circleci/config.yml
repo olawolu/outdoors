@@ -64,7 +64,7 @@ workflows:
         filters:
           branches:
             only:
-              - master
+              - main
 
       - dockerize:
           requires:
@@ -72,7 +72,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
 
       - deploy:
           requires:
@@ -80,4 +80,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
