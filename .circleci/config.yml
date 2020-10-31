@@ -45,7 +45,7 @@ jobs:
       # Install gcloud and `kubectl` if not already installed.
       - gke/install
       # initialize the gcloud CLI
-      - gke/init
+      # - gke/init
       # Update a deployment Docker image.
       - gke/rollout-image:
           deployment: cluster-1
