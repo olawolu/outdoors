@@ -48,7 +48,8 @@ jobs:
       # - gke/init
       # Update a deployment Docker image.
       - gke/rollout-image:
-          deployment: cluster-1
+          cluster: cluster-1
+          deployment: outdoorsapi
           container: outdoors-backend
           image: gcr.io/outdoors-293920/outdoorsapi:v1
 workflows:
