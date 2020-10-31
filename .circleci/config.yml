@@ -20,7 +20,7 @@ jobs:
       - checkout
       - run:
           name: Fetch dependencies and Run Tests
-          command: ||
+          command: |
             go get -v -t -d ./...
             go build .
             go test -v ./...
