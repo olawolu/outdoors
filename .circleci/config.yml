@@ -65,13 +65,15 @@ workflows:
           branches:
             only:
               - master
+
       - dockerize:
           requires:
             - build
-            filters:
-              branches:
-                only:
-                  - master
+          filters:
+            branches:
+              only:
+                - master
+                
       - deploy:
           requires:
             - dockerize
