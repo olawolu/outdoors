@@ -23,7 +23,7 @@ RUN apk --no-cache add ca-certificates
 
 # copy the static executable
 COPY --from=builder /go/bin/outdoorapi /go/bin/outdoorapi
-COPY --from=builder /go/src/github.com/olawolu/outdoors/.env . 
+# COPY --from=builder /go/src/github.com/olawolu/outdoors/.env . 
 EXPOSE 8080
 # RUN outdoorapi binary
 ENTRYPOINT ["/go/bin/outdoorapi" ]
