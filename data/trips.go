@@ -1,4 +1,4 @@
-package outdoors
+package data
 
 import "strings"
 

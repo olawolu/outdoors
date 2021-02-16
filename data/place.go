@@ -1,22 +1,9 @@
-package outdoors
-
-var (
-	// APIKey for Google's places API
-	APIKey  string
-	baseURL = "https://maps.googleapis.com/maps/api/place/"
-	nearbySearchURL = baseURL + "nearbysearch/json?"
-	photosURL = baseURL + "photo?"
-)
+package data
 
 // Geometry defines the coordinates of a place
 type Geometry struct {
 	Lat float64 `json:"lat"`
 	Lng float32 `json:"lng"`
-}
-
-type photos struct {
-	PhotoRef string `json:"photo_reference"`
-	URL      string `json:"url"`
 }
 
 // Place defines the fields that describes a destination
@@ -28,11 +15,12 @@ type Place struct {
 	Vicinity  string    `json:"vicinity"`
 }
 
-type response struct {
-	Results []Place `json:"results"`
+type photos struct {
+	PhotoRef string `json:"photo_reference"`
+	URL      string `json:"url"`
 }
 
-// Format controls how a Place object appears publicly
+// Format how a Place object appears publicly
 func (p *Place) Format() interface{} {
 	return map[string]interface{}{
 		"name":     p.Name,
