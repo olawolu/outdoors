@@ -12,7 +12,6 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/olawolu/outdoors"
-	"github.com/olawolu/outdoors/data"
 
 )
 
@@ -23,7 +22,7 @@ func init() {
 		log.Printf("Failed to load .env file: %v", err)
 	}
 	
-	data.APIKey = os.Getenv("PLACES_KEY")
+	outdoors.APIKey = os.Getenv("PLACES_KEY")
 	addr = ":" + os.Getenv("PORT")
 }
 
