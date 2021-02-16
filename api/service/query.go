@@ -108,7 +108,6 @@ func (q *Query) Run() []interface{} {
 		}(dst, i)
 	}
 	w.Wait()
-	fmt.Println("run")
 	return places
 }
 

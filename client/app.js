@@ -1,7 +1,8 @@
-(function($){
-  $(function(){
+(function ($) {
+  $(function () {
 
-    var apiHost = "http://localhost:8080";
+    // var apiHost = "http://localhost:8080";
+    var apiHost = "https://outdoor-api.herokuapp.com/"
     var map = null;
     var markers = [];
 
@@ -9,20 +10,20 @@
       if (b) {
         $(".loader").slideDown();
       } else {
-        window.setTimeout(function(){$(".loader").slideUp()}, 500);
+        window.setTimeout(function () { $(".loader").slideUp() }, 500);
       }
     }
 
-    $(".change-adventure").click(function(){
+    $(".change-adventure").click(function () {
       $("#adventure").slideUp();
       $("#meanderform").slideDown();
     });
 
-    $(".shuffle").click(function(){
+    $(".shuffle").click(function () {
       $("#meanderform").submit();
     });
 
-    $("#meanderform").submit(function(e){
+    $("#meanderform").submit(function (e) {
       e.preventDefault();
       busy(true);
 
@@ -30,7 +31,7 @@
       var locationText = $("#location").val();
       gc.geocode({
         address: locationText
-      }, function(results, status){
+      }, function (results, status) {
 
         if (status != google.maps.GeocoderStatus.OK) {
           alert("Ahh, we don't know where \"" + locationText + "\" is.");
@@ -41,9 +42,20 @@
         var result = results[0];
         var location = result.geometry.location;
         console.log(location.lat())
+        console.log(location.lng())
 
+        var object = {
+          lat: location.lat(),
+          lng: location.lng(),
+          radius: 5000,
+          cost: $("#price").val(),
+          journey: $("#journeys").val()
+
+        }
+        console.log(object);
         $.ajax({
-          url: apiHost + "/recommendations",
+          url: apiHost + "/recommendations?" + $.param(object),
+          // type: 'POST',
           dataType: "json",
           data: {
             "lat": location.lat(),
@@ -52,8 +64,8 @@
             "cost": $("#price").val(),
             "journey": $("#journeys").val()
           },
-          success: function(results){
 
+          success: function (results) {
             var title = $('#journeys option:selected').text() + " in " + locationText;
             $("#adventure .panel-title").text(title);
             $("#adventure").slideDown();
@@ -82,7 +94,7 @@
             $("#photos").empty();
             var counter = 0;
             var bounds = new google.maps.LatLngBounds();
-console.log(results);
+            console.log(results);
             for (var r in results) {
               if (!results.hasOwnProperty(r)) continue;
 
@@ -91,7 +103,7 @@ console.log(results);
               route.append(
                 $("<li/>").append(
                   $("<span>").append(
-                    $("<img>").addClass("pull-right icon").attr("src", item.icon).css({width:20,height:20}),
+                    $("<img>").addClass("pull-right icon").attr("src", item.icon).css({ width: 20, height: 20 }),
                     " ",
                     item.name,
                     " ",
@@ -111,14 +123,14 @@ console.log(results);
                 }
               }
 
-              var thisLocation = new google.maps.LatLng(item.lat,item.lng);
+              var thisLocation = new google.maps.LatLng(item.lat, item.lng);
               bounds.extend(thisLocation);
 
-              window.setTimeout((function(){
+              window.setTimeout((function () {
                 var $thisLocation = thisLocation;
                 var $item = item;
-                var $counter = counter+1;
-              return function(){
+                var $counter = counter + 1;
+                return function () {
                   var m = new google.maps.Marker({
                     position: $thisLocation,
                     map: map,
@@ -129,14 +141,14 @@ console.log(results);
                   });
                   markers.push(m);
                 }
-              })(), 500*(counter++))
+              })(), 500 * (counter++))
 
             }
 
             map.fitBounds(bounds);
 
           },
-          complete: function(){
+          complete: function () {
             busy(false);
           }
         });
@@ -149,19 +161,19 @@ console.log(results);
     $.ajax({
       type: "GET",
       url: apiHost + "/journeys",
-      error: function() {
+      error: function () {
         alert("The API doesn't seem to be running on :8080");
         busy(false);
       },
       dataType: "json",
-      success: function(journeys) {
+      success: function (journeys) {
 
         for (var i in journeys) {
           var journey = journeys[i];
           $("#journeys").append(
             $("<option/>")
               .text(journey.name)
-              .val(journey.journey)
+              .val(journey.destinations)
           )
         }
 

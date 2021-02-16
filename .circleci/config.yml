@@ -5,10 +5,11 @@ version: 2.1
 orbs:
   # docker: circleci/docker@1.5.0
   # go: circleci/go@1.4.0
-  gke: circleci/gcp-gke@1.1.0
-  gcr: circleci/gcp-gcr@0.11.0
+  # gke: circleci/gcp-gke@1.1.0
+  # gcr: circleci/gcp-gcr@0.11.0
+  heroku: circleci/heroku@1.2.5
 jobs:
-  build:
+  test:
     docker:
       # specify the version
       - image: circleci/golang:1.15
@@ -24,59 +25,41 @@ jobs:
             go get -v -t -d ./...
             go build .
             go test -v ./...
-  
-  dockerize:
-    description: Build and push image to Google Container Registry
+     
+  deploy:
+    description: Deploy api to Heroku
     machine: true
     steps:
       - checkout
-      - gcr/gcr-auth
-      - gcr/build-image:
-          image: outdoorsapi
-          tag: "v1"
-      - gcr/push-image:
-          image: outdoorsapi
-          tag: "v1"
-     
-  deploy:
-    description: Deploy application to Google Kubernetes Engine
-    machine: true
-    steps:
-      # Install gcloud and `kubectl` if not already installed.
-      - gke/install
-      # initialize the gcloud CLI
-      # - gke/init
-      # Update a deployment Docker image.
-      - gke/update-kubeconfig-with-credentials:
-          cluster: cluster-1
-          gcloud-service-key: GCLOUD_SERVICE_KEY
-          google-compute-zone: GOOGLE_COMPUTE_ZONE
-          google-project-id: GOOGLE_PROJECT_ID
-      - gke/rollout-image:
-          cluster: cluster-1
-          deployment: outdoorsapi
-          container: outdoors-backend
-          image: gcr.io/outdoors-293920/outdoorsapi:v1
-workflows:
-  build_update_deploy:
-    jobs:
-      - build:
-        filters:
-          branches:
-            only:
-              - main
 
-      - dockerize:
-          requires:
-            - build
+      - run:
+          name: Build and push Docker image to Heroku
+          command: |
+            sudo curl https://cli-assets.heroku.com/install.sh | sh
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a outdoor-api web
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a outdoor-api web
+     
+workflows:
+  test_update_deploy:
+    jobs:
+      - test:
           filters:
             branches:
               only:
                 - main
 
+      # - dockerize:
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
+
       - deploy:
           requires:
-            - dockerize
+            - test
           filters:
             branches:
               only:

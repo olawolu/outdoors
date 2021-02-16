@@ -1,3 +1,4 @@
 *.env
-cmd/outdoorsapi
+bin/*
 deploy.yaml
+*terraform.*
