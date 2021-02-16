@@ -1,4 +1,4 @@
-package outdoors
+package service
 
 import (
 	"errors"
