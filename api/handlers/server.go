@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -18,15 +17,15 @@ type Server struct {
 	Router *mux.Router
 }
 
+// Init creates the server object
 func (sv *Server) Init() {
 	sv.Host = "0.0.0.0"
 	sv.Port = os.Getenv("PORT")
 	sv.Router = mux.NewRouter()
 }
 
+// Run the server and serve requests
 func (sv *Server) Run() error {
-	fmt.Printf("Listening on port %s", sv.Port)
-
 	sv.Router.Methods("GET").Path("/journeys").HandlerFunc(sv.getTrips)
 	sv.Router.Methods("GET").Path("/recommendations").HandlerFunc(sv.getDestinations)
 

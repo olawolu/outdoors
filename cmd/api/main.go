@@ -6,8 +6,8 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"github.com/olawolu/outdoors/handlers"
-	"github.com/olawolu/outdoors/service"
+	"github.com/olawolu/outdoors/api/handlers"
+	"github.com/olawolu/outdoors/api/service"
 )
 
 var addr string
@@ -15,7 +15,7 @@ var addr string
 var server = handlers.Server{}
 
 func init() {
-	if err := godotenv.Load("../../.env"); err != nil {
+	if err := godotenv.Load("../.env"); err != nil {
 		log.Printf("Failed to load .env file: %v", err)
 	}
 	service.APIKey = os.Getenv("PLACES_KEY")

@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/olawolu/outdoors"
-	"github.com/olawolu/outdoors/data"
-	"github.com/olawolu/outdoors/service"
+	"github.com/olawolu/outdoors/api/data"
+	"github.com/olawolu/outdoors/api/service"
 )
 
 func (sv *Server) getTrips(w http.ResponseWriter, r *http.Request) {

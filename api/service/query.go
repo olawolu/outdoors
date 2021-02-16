@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/olawolu/outdoors/data"
+	"github.com/olawolu/outdoors/api/data"
 )
 
 var (
