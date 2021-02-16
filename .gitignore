@@ -2,3 +2,4 @@
 bin/*
 deploy.yaml
 *terraform.*
+*.sh

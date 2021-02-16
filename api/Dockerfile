@@ -1,7 +1,7 @@
 FROM alpine:3.12
 RUN apk --no-cache add ca-certificates
 
-COPY bin/outdoorapi /go/bin/outdoorapi
+COPY /bin/outdoorapi /go/bin/outdoorapi
 
 WORKDIR /go/bin/
 # ENV PORT 8080
