@@ -1,5 +1,7 @@
 *.env
-bin/*
+bin/
 deploy.yaml
 *terraform.*
-*.sh
+env.sh
+scripts/
+*.txt
